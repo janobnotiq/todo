@@ -180,7 +180,7 @@ def add_comment_view(request):
                 return redirect(request.META.get('HTTP_REFERER'))
             
             Comment.objects.create(author=author,text=text,stars=stars)
-            return redirect("home")
+            return redirect("comments")
         else:
             messages.warning(request,"Nimadir xato ketdi!")
             form = CommentForm
