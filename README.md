@@ -1,3 +1,5 @@
+<a href="https://dasturchitodo.pythonanywhere.com/">Bu yerga deploy qilingan.</a>
+<p>6-fevralgacha in shaa Alloh</p>
 🔵 To Do
 
 Bu loyiha ham django freymvorki yordamida qilingan. Quyida unda bor xususiyat(feature)larni aytib o'taman.
