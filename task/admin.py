@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Task,Category
+from .models import Task,Category,Comment
 
 
 @admin.register(Category)
@@ -19,3 +19,7 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
     list_display = ["task","category","doer","is_done"]
+    
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ["text","author","stars"]

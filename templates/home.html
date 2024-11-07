@@ -18,6 +18,7 @@
       integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
     <link
       rel="stylesheet"
@@ -28,100 +29,200 @@
       .form-control {
         padding: 1.375rem 0.75rem !important;
       }
+
+      .btn-custom {
+        width: 200px;
+        height: 50px;
+      }
+      .qoshish {
+        max-width: 400px;
+      }
+      hr {
+        border: solid dodgerblue 5px; /* Removes default border */
+        height: 4px; /* Thickness of the line */
+        background-color: #3498db; /* Color of the line */
+      }
     </style>
   </head>
   <body>
     {% if user.is_authenticated %}
-        <nav style="float: right; margin: 30px;">
-          <a href="{% url 'logout' %}" class="btn btn-outline-primary">Log out</a>
-        </nav>
+    <nav
+      style="
+        float: right;
+        margin: 10px;
+        padding: 10px;
+        border: 5px solid tomato;
+        border-radius: 10px;
+      "
+    >
+      <h3 class="text-center text-2xl">
+        Xush kelibsiz, <b>{{user.username}}</b>!
+      </h3>
+      <br />
+      <a href="{% url 'add-comment' %}" class="btn btn-sm btn-outline-success"
+        ><i class="fa fa-commenting"></i>Fikr bildirish</a
+      >
+      <a href="{% url 'comments' %}" class="btn btn-sm btn-warning"
+        ><i class="fa fa-comments"></i>Foydalanuvchilar fikri</a
+      >
+      <a href="{% url 'logout' %}" class="btn btn-sm btn-danger"
+        >Tizimdan chiqish</a
+      >
+    </nav>
+    <br />
     <div class="container">
-        <h3 class="pt-5 text-center">To Do</h3>
-        <div class="row">
-          <h4>My Day</h4>
-          <p class="text-muted">{% now "jS F Y" %}</p>
-          <div class="col-md-7 col-lg-7" style="height: 450px; overflow: scroll">
-            <!-- List of all the tasks for the day -->
-            {% for task in tasks %}
-            <div class="card m-1">
-              <div class="card-body">
-                {{task.task}}
-                <span style="position: relative; float: right">
-                  <a href="{% url 'task-by-category' task.category.slug %}" class="btn btn-outline-primary">
-                    <i class="fa fa-check"></i>{{task.category}}
-                  </a>
-                  <a href="{% url 'mark-as-done' task.id %}" class="btn btn-success"
-                    ><i class="fa fa-check"></i> Mark as Done</a
-                  >
-                  <a href="{% url 'delete-task' task.id %}" class="btn btn-danger"
-                    ><i class="fa fa-trash"></i
-                  ></a>
-                  <a href="{% url 'edit-task' task.id %}" class="btn btn-primary"
-                    ><i class="fa fa-pencil"></i
-                  ></a>
-                </span>
-              </div>
-            </div>
-            {% endfor %}
+      <br />
+      <hr />
+      <br />
+      <div class="qoshish">
+        <form action="{% url 'add-task' %}" method="post">
+          <div class="form-group">
+            {% csrf_token %}
+            <select
+              id="category"
+              name="category"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option selected>Kategoriyani tanlash majburiy</option>
+              {% for category in categories %}
+              <option value="{{category}}">{{category}}</option>
+              {% endfor %}</select
+            ><br />
+            <span style="display: flex">
+              <input
+                type="text"
+                name="task"
+                class="form-control"
+                placeholder="rejani shu yerga yozing"
+              />
+              <button
+                class="btn btn-primary"
+                style="width: 150px; margin-left: 10px"
+              >
+                Qo'shish
+              </button>
+            </span>
+            <br />
           </div>
-          <div class="col-md-5 col-lg-5">
-            <h5>Completed Tasks</h5>
-            <!-- List of all the tasks that have completed -->
-            {% for task in completed_tasks %}
-            <div class="card m-1">
-              <div class="card-body">{{task.task}}</div>
+        </form>
+      </div>
+      <hr />
+      <br />
+      <div class="row">
+        <div class="col-md-7 col-lg-7" style="height: 300px; overflow: scroll">
+          <br />
+          <h5 class="text-xl font-bold">Bajariladigan ishlar</h5>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 64 64"
+          >
+            <circle cx="32" cy="32" r="30" fill="#4f84d8" />
+            <path fill="#fff" d="M16 33.7L32 49l16-15.3H37.4V15H27.1v18.7z" />
+          </svg>
+          <br />
+          <!-- List of all the tasks for the day -->
+          {% if tasks %} {% for task in tasks %}
+          <div class="card m-1">
+            <div class="card-body">
+              <b style="color: dodgerblue">{{task.task}}</b><br />
               <span style="position: relative; float: right">
-                <a href="{% url 'task-by-category' task.category.slug %}" class="btn btn-outline-info"
-                  ><i class="fa fa-check"></i>{{task.category}}</a
+                <a
+                  href="{% url 'task-by-category' task.category.slug %}"
+                  class="btn btn-outline-primary"
                 >
-                <a href="{% url 'mark-as-undone' task.id %}" class="btn btn-warning"
-                  ><i class="fa fa-coffee"></i> Make as undone</a
-                >
-                <a href="{% url 'delete-task' task.id %}" class="btn btn-danger"
-                  ><i class="fa fa-trash"></i> Delete</a
-                >
+                  <i class="fa fa-check"></i>{{task.category}}
+                </a>
+                <a
+                  href="{% url 'mark-as-done' task.id %}"
+                  class="btn btn-success"
+                  ><i class="fa fa-check"></i
+                ></a>
+                <a
+                  href="{% url 'delete-task' task.id %}"
+                  class="btn btn-danger"
+                  onclick="return confirm('Siz rostdan ham buni o\'chirmoqchimisiz?');"
+                  ><i class="fa fa-trash"></i
+                ></a>
+                <a href="{% url 'edit-task' task.id %}" class="btn btn-primary"
+                  ><i class="fa fa-pencil"></i
+                ></a>
               </span>
             </div>
-            {% endfor %}
           </div>
+          {% endfor %} {% else %}
+          <div class="card m-1">
+            <div class="card-body">
+              <b style="color: tomato">Hozircha hech qanday reja yo'q</b>
+            </div>
+          </div>
+          {% endif %}
         </div>
-        <div class="row">
-          <div
-            class="col-md-6 col-lg-6 p-0"
-            style="position: absolute; bottom: 50px"
+        <div
+          class="col-md-5 col-lg-5 mb-3"
+          style="height: 300px; overflow: scroll"
+        >
+          <br />
+          <h5 class="text-xl font-bold">Bajarilganlar</h5>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 64 64"
           >
-            <!-- To Do Form -->
-            <form action="{% url 'add-task' %}" method="post">
-              <div class="form-group">
-                {% csrf_token %}
-                <span style="display: flex">
-                  <input
-                    type="text"
-                    name="task"
-                    class="form-control"
-                    placeholder="Add a task"
-                    />
-                    <button class="btn btn-primary" style="width: 200px">
-                      <i class="fa fa-plus"></i> Add
-                    </button>
-                  </span>
-                  <p>select category of task:</p>
-                  <select name="category" required>
-                    <option disabled selected value> -- select category -- </option>
-                    {% for category in categories %}
-                    <option value="{{category}}">{{category}}</option>
-                    {% endfor %}
-                  </select>
-              </div>
-            </form>
+            <circle cx="32" cy="32" r="30" fill="#4fd85f" />
+            <path fill="#fff" d="M16 33.7L32 49l16-15.3H37.4V15H27.1v18.7z" />
+          </svg>
+          <br />
+          <!-- List of all the tasks that have completed -->
+          {% for task in completed_tasks %}
+          <div class="card m-2 p-2">
+            <div class="card-body">
+              <b style="color: rgb(21, 206, 21)">{{task.task}}</b>
+            </div>
+            <span style="position: relative; float: right">
+              <a
+                href="{% url 'task-by-category' task.category.slug %}"
+                class="btn btn-outline-primary"
+                ><i class="fa fa-check"></i>{{task.category}}</a
+              >
+              <a
+                href="{% url 'mark-as-undone' task.id %}"
+                class="btn btn-warning"
+                ><i class="fa fa-coffee"></i>Qaytarish</a
+              >
+              <a
+                href="{% url 'delete-task' task.id %}"
+                class="btn btn-danger"
+                onclick="return confirm('Siz rostdan ham buni o\'chirmoqchimisiz?');"
+                ><i class="fa fa-trash"></i
+              ></a>
+            </span>
           </div>
+          {% endfor %}
         </div>
+      </div>
+
       {% else %}
-        <h3 style="text-align: center; margin-top: 70px; margin-bottom: 50px;">Register or login</h3>
-        <div style="display: flex; flex-direction: column; align-items: center;">
-          <a href="{% url 'register' %}" class="btn btn-outline-primary">Register</a><br><br>
-          <a href="{% url 'login' %}" class="btn btn-outline-success">Login</a>
-        </div>
+      <h3
+        style="text-align: center; margin-top: 70px; margin-bottom: 50px"
+        class="text-2xl font-bold"
+      >
+        Ro'yxatdan o'ting yoki tizimga kiring
+      </h3>
+      <div style="display: flex; flex-direction: column; align-items: center">
+        <a href="{% url 'register' %}" class="btn btn-primary btn-custom"
+          >Ro'yxatdan o'tish</a
+        ><br /><br />
+
+        <a href="{% url 'login' %}" class="btn btn-success btn-custom"
+          >Tizimga kirish</a
+        ><br /><br />
+        <a href="{% url 'comments' %}" class="btn btn-warning btn-custom"
+          ><i class="fa fa-comments"></i>Foydalanuvchilar fikri</a
+        >
+      </div>
       {% endif %}
     </div>
   </body>

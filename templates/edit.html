@@ -28,14 +28,18 @@
       .form-control {
         padding: 1.375rem 0.75rem !important;
       }
+      a{
+        text-decoration: none;
+      }
     </style>
   </head>
   <body>
     <div class="container">
-      <h3 class="pt-5 text-center">Django ToDo App</h3>
+      <h1 class="pt-5 text-center" style="color: dodgerblue;">Tahrirlash sahifasi</h1>
+      <br>
       <div class="row">
-        <h4>My Day</h4>
-        <p class="text-muted">{% now "jS F Y" %}</p>
+        <h4>Hushyor o'zgartiring!</h4>
+        <br>
       <div class="row">
         <form action="{% url 'edit-task' task.id %}" method="post">
             <div class="form-group">
@@ -45,27 +49,29 @@
                   type="text"
                   name="changed"
                   class="form-control"
-                  placeholder="Edit a task"
+                  placeholder="ishni tahrirlash"
                   value="{{task.task}}"
                 />
-                <button class="btn btn-primary mx-2 " style="width: 200px;">
-                  <i class="fa fa-plus"></i> Edit
+                <button class="btn btn-primary mx-2 " style="width: 200px;font-weight: bold;">
+                  <i class="fa fa-pencil"></i> Tahrirlash
                 </button>
-                <button class="btn  btn-lg btn-secondary" style="width: 150px;">
-                    <a href="{% url 'home' %}" style="color: white;">back</a>
-                </button>
+                
               </span>
             </div>
             <br><br>
-            <p>if you want, change category:</p>
-                  <select name="category">
-                    <option value="{{task.category}}">{{task.category}}</option>
-                    {% for category in categories %}
-                    <option value="{{category}}">{{category}}</option>
-                    {% endfor %}
-                  </select>
+            <p style="font-weight: bold;">Istasang, kategoriyani ham o'zgartir</p>
+                    <select name="category" class="form-select" aria-label="Default select example">
+                      <option value="{{task.category}}" selected>{{task.category}}</option>
+                      {% for category in categories %}
+                      <option value="{{category}}">{{category}}</option>
+                      {% endfor %}
+                    </select>
           </form>
       </div>
     </div>
+    <br>
+    <button class="btn btn-md btn-success" >
+      <a href="{% url 'home' %}" style="color: white;font-weight: bold;">Ortga</a>
+  </button>
   </body>
 </html>

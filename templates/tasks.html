@@ -28,27 +28,97 @@
       .form-control {
         padding: 1.375rem 0.75rem !important;
       }
+      .card-custom {
+        background-color: rgba(135, 207, 235, 0.813);
+        transition: background-color 0.25s;
+      }
+      .card-custom:hover {
+        background-color: rgba(135, 207, 235, 0.384);
+      }
+      .card-customtoy {
+        background-color: rgba(230, 230, 250, 0.966);
+        transition: background-color 0.25s;
+      }
+      .card-customtoy:hover {
+        background-color: rgba(135, 207, 235, 0.349);
+      }
+      .card-custombek {
+        background-color: wheat;
+        transition: background-color 0.25s;
+      }
+      .card-custombek:hover {
+        background-color: rgba(135, 207, 235, 0.349);
+      }
     </style>
   </head>
   <body>
     <div class="container">
-      <h3 class="pt-5 text-center">To Do</h3>
+      <h3 class="pt-5 text-center"><b>{{category}}</b> kategoriyasidagi ishlar</h3>
+      <br>
       <div class="row">
-        <h4>Tasks related to "{{category}}"</h4>
-        <p class="text-muted">{% now "jS F Y" %}</p>
+        <span style="position: relative; float: right">
+            <a href="{% url 'home' %}" class="btn btn-outline-success"
+            ><i class="fa fa-home"></i>Bosh sahifaga</a
+          >
+        </span>
+        <br>
+        <br>
       <div class="row">
+        {% if tasks %}
         {% for task in tasks %}
-        <div class="card m-1">
-            <div class="card-body">{{task.task}}</div>
-            <span style="position: relative; float: right">
-                <a href="{% url 'home' %}" class="btn btn-outline-success"
-                ><i class="fa fa-home"></i> Go home</a
+        {% if task.is_done %}
+        <div class="card m-3 p-3 card-custom">
+          <div class="card-body"><b>{{task.task}}</b>
+            <br><br>
+            <span style="position: relative; float: left">
+              <a
+                href=""
+                class="btn btn-success"
+                ><i class="fa fa-check"></i>Bajarilgan</a
               >
-            </span>
-        </div>
+              <a
+              href="{% url 'delete-task' task.id %}"
+              class="btn btn-danger"
+              onclick="return confirm('Siz rostdan ham buni o\'chirmoqchimisiz?');"
+              ><i class="fa fa-trash"></i
+                ></a>
+                <a href="{% url 'edit-task' task.id %}" class="btn btn-primary"
+                ><i class="fa fa-pencil"></i
+                  ></a>
+                </span></div>
+              </div>
+        {% else %}
+        <div class="card m-3 p-3 card-custombek">
+          <div class="card-body"><b>{{task.task}}</b>
+            <br><br>
+            <span style="position: relative; float: left">
+              <a
+                href=""
+                class="btn btn-danger"
+                ><i class="fa fa-coffee"></i>Bajarilmagan</a
+              >
+              <a
+              href="{% url 'delete-task' task.id %}"
+              class="btn btn-danger"
+              onclick="return confirm('Siz rostdan ham buni o\'chirmoqchimisiz?');"
+              ><i class="fa fa-trash"></i
+                ></a>
+                <a href="{% url 'edit-task' task.id %}" class="btn btn-primary"
+                ><i class="fa fa-pencil"></i
+                  ></a>
+                </span></div>
+              </div>
+        {% endif %}
         {% endfor %}
-      </div>
+            </div>
+        {% else %}
+        <div class="card m-3 p-3 card-customtoy">
+          <div class="card-body"><b style="color: red;">Hozircha bu kategoriya bo'yicha ishlar yo'q</b>
+            </div>
+              </div>
+        {% endif %}
 
     </div>
+    <br><br>
   </body>
 </html>
